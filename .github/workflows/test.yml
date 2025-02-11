@@ -7,6 +7,9 @@ on:
     branches:
       - main
 
+env:
+  BUN_VERSION: 1.1.0
+
 permissions:
   contents: write
 
@@ -74,40 +77,40 @@ jobs:
           - windows-latest
 
         file:
-          - name: package.json (bun@1.1.0)
+          - name: package.json (bun@${{ env.BUN_VERSION }})
             file: package.json
             run: |
-              echo "$(jq '. += {"packageManager": "bun@1.1.0"}' package.json)" > package.json
+              echo "$(jq '. += {"packageManager": "bun@$BUN_VERSION"}' package.json)" > package.json
 
-          - name: /foo/package.json (bun@1.1.0)
+          - name: /foo/package.json (bun@${{ env.BUN_VERSION }})
             file: /foo/package.json
             run: |
-              echo "$(jq '. += {"packageManager": "bun@1.1.0"}' package.json)" > /foo/package.json
+              echo "$(jq '. += {"packageManager": "bun@$BUN_VERSION"}' package.json)" > /foo/package.json
 
-          - name: package.json (yarn@bun@1.1.0)
+          - name: package.json (yarn@bun@${{ env.BUN_VERSION }})
             file: package.json
             run: |
-              echo "$(jq '. += {"packageManager": "yarn@bun@1.1.0"}' package.json)" > package.json
+              echo "$(jq '. += {"packageManager": "yarn@bun@$BUN_VERSION"}' package.json)" > package.json
 
-          - name: .tool-versions (bun 1.1.0)
+          - name: .tool-versions (bun ${{ env.BUN_VERSION }})
             file: .tool-versions
-            run: echo "bun 1.1.0" > .tool-versions
+            run: echo "bun $BUN_VERSION" > .tool-versions
 
-          - name: .tool-versions (bun1.1.0)
+          - name: .tool-versions (bun${{ env.BUN_VERSION }})
             file: .tool-versions
-            run: echo "bun1.1.0" > .tool-versions
+            run: echo "bun$BUN_VERSION" > .tool-versions
 
-          - name: .tool-versions (bun  1.1.0)
+          - name: .tool-versions (bun  ${{ env.BUN_VERSION }})
             file: .tool-versions
-            run: echo "bun 1.1.0" > .tool-versions
+            run: echo "bun $BUN_VERSION" > .tool-versions
 
-          - name: .bumrc (1.1.0)
+          - name: .bumrc (${{ env.BUN_VERSION }})
             file: .bumrc
-            run: echo "1.1.0" > .bumrc
+            run: echo "$BUN_VERSION" > .bumrc
 
-          - name: .bun-version (1.1.0)
+          - name: .bun-version (${{ env.BUN_VERSION }})
             file: .bun-version
-            run: echo "1.1.0" > .bun-version
+            run: echo "$BUN_VERSION" > .bun-version
 
     steps:
       - name: 📥 Checkout
@@ -124,7 +127,7 @@ jobs:
       - name: ⚖️ Compare versions
         uses: ./.github/actions/compare-bun-version
         with:
-          bun-version: "1.1.0"
+          bun-version: "${{ env.BUN_VERSION }}"
 
   setup-bun-download-url:
     name: setup-bun from (${{ matrix.os }}, download url)
